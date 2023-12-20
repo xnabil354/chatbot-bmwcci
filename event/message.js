@@ -106,10 +106,20 @@ export default async function Message(zhn, m, chatUpdate) {
         break;
       case "delevent":
         if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
-        if (args.length < 2) return m.reply(`*${prefix}delevent* Title|Content Event / Kegiatan`);
-        if (!q.includes("|")) return m.reply(`*${prefix}delevent* Title|Content Event / Kegiatan`);
+        if (!m.text) return m.reply(`*${prefix}delevent* Title`);
+        let objEvent = {
+          Title: m.text.split("|")[0],
+          Time: Date.now(),
+          Content: m.text.split("|")[1],
+        };
+        let index = event.findIndex((e) => {
+          return e.Title === objEvent.Title;
+        });
+        if (index > -1) {
+          event.splice(index, 1);
+        }        
         fs.writeFileSync("./database/event.json", JSON.stringify(event, null, 2));
-        m.reply(`Successfully Added New Event, Please Check on ${prefix}listevent`);
+        m.reply(`Successfully Delete Event, Please Check on ${prefix}listevent`);
         break;
       case 'listkegiatan':
             case 'listevent':
@@ -117,7 +127,7 @@ export default async function Message(zhn, m, chatUpdate) {
                 event.sort((a, b) => (a.Waktu < b.Waktu) ? 1 : -1)
                 let chas = `「 *EVENT-BMWCCI* 」\n\n`
                 for (let i = 0; i < event.length; i++){
-                    chas += `• *Title:* ${event[i].Title}\n• *Waktu:* ${moment(event[i].Waktu).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Content:* ${event[i].Content}\n\n`
+                    chas += `• *Title :* ${event[i].Title}\n• *Time :* ${moment(event[i].Time).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Description :* ${event[i].Content}\n\n`
                 }
                 m.reply(chas.trim())
                 break
