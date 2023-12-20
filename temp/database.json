@@ -1,0 +1,45 @@
+{
+  "users": {
+    "62858156631709@s.whatsapp.net": {
+      "limit": 15,
+      "lastChat": 1691704594528,
+      "premium": true,
+      "VIP": true,
+      "name": "Saya Dika 2",
+      "banned": false
+    },
+    "6288292024190@s.whatsapp.net": {
+      "limit": 15,
+      "lastChat": 1691704675873,
+      "premium": true,
+      "VIP": true,
+      "name": "Saya Dika",
+      "banned": false
+    },
+    "6287777431550@s.whatsapp.net": {
+      "limit": 15,
+      "lastChat": 1703050387150,
+      "premium": true,
+      "VIP": true,
+      "name": "Administrator",
+      "banned": false
+    },
+    "6281281524356@s.whatsapp.net": {
+      "limit": 15,
+      "lastChat": 1703050474748,
+      "premium": true,
+      "VIP": true,
+      "name": "Nabil Zihni",
+      "banned": false
+    },
+    "6281387127332@s.whatsapp.net": {
+      "limit": 15,
+      "lastChat": 1703078245151,
+      "premium": true,
+      "VIP": true,
+      "name": "Chris",
+      "banned": false
+    }
+  },
+  "groups": {}
+}
