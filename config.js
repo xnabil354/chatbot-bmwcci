@@ -22,7 +22,7 @@ export default {
       database: "database.json", 
       owner: ["6281281524356", "6281387127332"], 
       sessionName: "session",
-      prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^12345]/i,
+      prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
       pairingNumber: "6287777431550"
    },
 

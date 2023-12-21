@@ -52,6 +52,9 @@ export default async function Message(zhn, m, chatUpdate) {
     switch (command) {
       case "menu":
       case "help":
+      case "halo":
+      case "hai":
+      case "hi":
         {
           let text = `Halo @${
             m.sender.split`@`[0]
@@ -67,7 +70,7 @@ export default async function Message(zhn, m, chatUpdate) {
               text += `\n`;
               text += `\n\n`;
               text += `Silakan pilih salah satu menu di atas, dengan awalan prefix, lalu tekan tombol kirim.\n\n`;
-              text += `Mari berbagi ! ⏩\nCopy/paste https://wa.me/6287777431550?text=/menu`;
+              text += `Mari berbagi ! ⏩\nCopy/paste https://wa.me/6287777431550?text=halo`;
             })
             .join("\n\n");
 
@@ -92,6 +95,7 @@ export default async function Message(zhn, m, chatUpdate) {
         }
         break;
       case "addevent":
+      case "createevent":
         if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
         if (m.text.length < 2) return m.reply(`*${prefix}addevent* Title|Content Event / Kegiatan`);
         if (!m.text.includes("|")) return m.reply(`*${prefix}addevent* Title|Content Event / Kegiatan`);
@@ -105,6 +109,8 @@ export default async function Message(zhn, m, chatUpdate) {
         m.reply(`Successfully Added New Event, Please Check on ${prefix}listevent`);
         break;
       case "delevent":
+      case "deleteevent":
+      case "hapusevent":
         if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
         if (!m.text) return m.reply(`*${prefix}delevent* Title`);
         let objEvent = {
@@ -121,16 +127,103 @@ export default async function Message(zhn, m, chatUpdate) {
         fs.writeFileSync("./database/event.json", JSON.stringify(event, null, 2));
         m.reply(`Successfully Delete Event, Please Check on ${prefix}listevent`);
         break;
+      // case 'listkegiatan':
+      //       case 'listevent':
+      //         if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
+      //           event.sort((a, b) => (a.Waktu < b.Waktu) ? 1 : -1)
+      //           let chas = `「 *EVENT-BMWCCI* 」\n\n`
+      //           for (let i = 0; i < event.length; i++){
+      //               chas += `• *Title :* ${event[i].Title}\n• *Time :* ${moment(event[i].Time).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Description :* ${event[i].Content}\n\n`
+      //           }
+      //           m.reply(chas.trim())
+      //           break
       case 'listkegiatan':
-            case 'listevent':
-              if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
-                event.sort((a, b) => (a.Waktu < b.Waktu) ? 1 : -1)
-                let chas = `「 *EVENT-BMWCCI* 」\n\n`
-                for (let i = 0; i < event.length; i++){
-                    chas += `• *Title :* ${event[i].Title}\n• *Time :* ${moment(event[i].Time).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Description :* ${event[i].Content}\n\n`
-                }
-                m.reply(chas.trim())
-                break
+      case 'listevent':
+        if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
+
+        event.sort((a, b) => (a.Waktu < b.Waktu) ? 1 : -1);
+
+        async function sendEventsSequentially() {
+          for (let i = 0; i < event.length; i++) {
+            const currentEvent = event[i];
+            const message = `「 *EVENT-BMWCCI* 」\n\n• *Title :* ${currentEvent.Title}\n• *Time :* ${moment(currentEvent.Time).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Description :* ${currentEvent.Content}\n\n`;
+            await m.reply(message.trim());
+            await Func.sleep(5)
+          }
+        }
+
+        sendEventsSequentially(); // Call the asynchronous function
+        break;
+      case "1":
+        let about_bmw = `
+BMWCCI didirikan pada 24 Mei 2003 di Jakarta Indonesia.  BMWCCI resmi menjadi anggota International BMW Club Organization dalam BMW Clubs Council Meeting di Pretoria, Afrika Selatan, pada hari Kamis, 14 Desember 2006. BMWCCI telah berkembang, dari 29 Chapter dan 2 Register dengan keanggotaan lebih dari 3000 anggota  dan tersebar di seluruh tanah air dan akan terus berkembang dengan adanya pengajuan dari daerah untuk menjadi bagian dari BMWCCI.  Awalnya calon klub anggota BMW mengusulkan nama klub BMW tersebut adalah BMW Club Indonesia.  Namun mengingat nama klub tersebut sebelumnya sudah ada, yaitu klub khusus sepeda motor BMW Motorrad Club Indonesia.,
+
+Akhirnya disepakati nama klub tersebut diubah menjadi BMW Car Club of Indonesia (selanjutnya disebut BMWCCI).  Penamaan Klub disesuaikan dengan format nama Klub serupa di berbagai negara lain.  Dalam pertemuan di BMW Astra Jalan Proklamasi, para anggota BMWCCI sepakat untuk menyepakati rancangan Anggaran Dasar BMWCCI dan nama klub.  Maka lahirlah BMWCCI pada tanggal 24 Mei 2003 dengan jumlah anggota awal 23 orang.  Demikian pula latar belakang pekerjaan dan usia anggota BMWCCI.  Hal ini sesuai dengan sifat BMWCCI yang terbuka dan bebas.  Pada hari Kamis, 14 Desember 2006 BMWCCI resmi menjadi anggota Organisasi Klub BMW Internasional.  Secara resmi BMWCCI menjadi anggota International Council of BMW Clubs setelah pertemuan tahunan mereka di Pretoria, Afrika Selatan pada bulan Oktober 2006.
+International BMW Club Organization sendiri didirikan pada tahun 1981 dan memiliki sekitar 600 klub dengan lebih dari 200.000 anggota di seluruh dunia.  Ini mencakup mobil BMW klasik dan mobil BMW baru, dengan tujuan yang sama adalah untuk berbagi slogan legendaris BMW “sheer driving pleasure"  Dengan berkembangnya anggota BMWCCI keluar Jakarta bahkan ke daerah maka muncul wacana untuk menciptakan perwakilan di daerah.  Dan saran dari Mantan Presiden Dewan Internasional BMW, Ian Branstom.  sebaiknya menjadikan Umbrella Club saja, semua menjadi wadah bagi seluruh Club di Indonesia kedepannya.  
+
+Dengan adanya perubahan format tersebut maka nama Klub pun ikut berubah menjadi BMW Car Clubs Indonesia.  
+
+Cirebon Chapter merupakan Club Member pertama yang menggunakan nama BMW Car Clubs Indonesia Chapter Cirebon.  VISI, BMWCCI sebagai klub yang mempunyai nilai tambah bagi para anggotanya, BMWCCI sebagai klub yang tidak hanya sebagai komunitas otomotif namun sebagai BMW Car Club yang solid dan terkenal di tingkat nasional dan internasional.  MISI, BMWCCI membentuk anggotanya yang solid, kompak dan kekeluargaan melalui acara-acara terkait yang dapat membawa nama baik BMWCCI.  Menumbuhkan rasa memiliki dan kecintaan para anggota terhadap klub dan kendaraannya.  Memberikan nilai tambah dan manfaat bagi anggota dan klub.  BMWCCI
+
+https://bmwcci.org/about-us/`
+        m.reply(about_bmw.trim())
+      break;
+      case "2":
+        let informasi_bmmw = `
+Website BMWCCI 
+https://bmwcci.org/
+
+Social Media 
+Instagram : www.instagram.com/bmwcci.official
+
+Youtube : https://m.youtube.com/channel/UCeyIUWIIlcSQpUtmCzxC4Ig
+
+
+Bmwcci Jakarta Chapter
+
+1. Social Media 
+Instagram : https://www.instagram.com/bmwcci.jakarta_chapter
+
+Facebook : 
+https://www.facebook.com/BmwcciJakartaChapter`
+        m.reply(informasi_bmmw.trim())
+        break
+      case "3":
+        let register_anggota = `
+FORMULIR PENDAFTARAN ANGGOTA BARU / RENEWAL
+BMWCCI JAKARTA CHAPTER OFFICIAL CLUB
+SYARAT DAN KETENTUAN
+ANGGOTA BARU BMWCCI JAKARTA CHAPTER OFFICIAL CLUB
+
+Persyaratan Anggota Baru BMWCCI Jakarta Chapter
+
+1. Tidak aktif terdaftar di BMWCCI Chapter lain
+
+2. Memiliki unit BMW
+
+3. Domisili sekitar Jakarta, Depok, Tangerang dan Bekasi (JaDeTaBek)
+
+4. Biaya pendaftaran baru sebesar Rp1.000.000,- (satu juta rupiah)
+*Biaya renewal sebesar Rp500.000,- (lima ratus ribu rupiah)
+
+5. Mengisi biodata secara lengkap
+Pembayaran dapat ditransfer ke bendahara:
+Bank : Mandiri, KCP Gedung Jamsostek
+No Rek : 0700007516151
+Atas Nama : BMWCCI Jakarta Chapter
+
+6. Catatan: Harap nominal transfer ditambahkan Rp25,- dibelakangnya. (contoh transfer: Rp1.000.025)
+
+Atribut dan Benefit
+1 paket atribut (Kemeja, Kartu Identitas Elektronik, Stiker), minimal 3 bulan atribut dapat diterima oleh member setelah menjadi anggota
+
+2. Masuk dalam Whatsapp Group
+Program Kegiatan baik Event Nasional dan Internasional
+Harga spesial dari kerjasama beberapa mitra
+
+https://member.bmwccijakartachapter.org/register`
+        m.reply(register_anggota.trim())
+        break
       case "speed":
         {
           const { promisify } = await import("util");
@@ -571,10 +664,7 @@ export default async function Message(zhn, m, chatUpdate) {
             return m.reply(req?.message || "error");
           await m.reply(req);
         }
-        break;
-
-      /* Umm, maybe for download menu  */
-      // buy key api.xfarr.com on https://api.xfarr.com/pricing
+        break
 
       case "tiktok":
       case "tt":
@@ -603,7 +693,7 @@ export default async function Message(zhn, m, chatUpdate) {
             if (req.status !== 200) return m.reply(req?.message || "error");
             for (let url of req.result.url) {
               m.reply(url);
-              await Func.sleep(5000); // delay 5 seconds
+              await Func.sleep(5); // delay 5 seconds
             }
           } else
             m.reply(req.result.url, {
