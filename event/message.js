@@ -56,26 +56,17 @@ export default async function Message(zhn, m, chatUpdate) {
       case "hai":
       case "hi":
         {
-          let text = `Halo @${
-            m.sender.split`@`[0]
-          }, Selamat datang di BMW Cars Club Indonesia Jakarta Chapter, ChatBot Seputar Informasi BMWCCI,\n\n*Total Command :* ${Object.values(
-            config.menu
-          )
-            .map((a) => a.length)
-            .reduce((total, num) => total + num, 0)}\n`;
-          Object.entries(config.menu)
-            .map(([type, command]) => {
+          let text = `Halo @${m.sender.split`@`[0]}, Selamat datang di BMW Cars Club Indonesia Jakarta Chapter, ChatBot Seputar Informasi BMWCCI,\n\n*Total Command :* ${Object.values(config.menu).map((a) => a.length).reduce((total, num) => total + num, 0)}\n`;
+          Object.entries(config.menu).map(([type, command]) => {
               text += `\n`;
               text += `⎚ ${command.map((a) => `${a}`).join("\n⎚ ")}\n`;
               text += `\n`;
               text += `\n\n`;
-              text += `Silakan pilih salah satu menu di atas, dengan awalan prefix, lalu tekan tombol kirim.\n\n`;
+              text += `Silakan pilih salah satu menu di atas, dengan mengetikkan angkanya, lalu tekan tombol kirim.\n\n`;
               text += `Mari berbagi ! ⏩\nCopy/paste https://wa.me/6287777431550?text=halo`;
-            })
-            .join("\n\n");
+            }).join("\n\n");
 
-          return zhn.sendMessage(
-            m.from,
+          return zhn.sendMessage(m.from,
             {
               text,
               contextInfo: {
@@ -97,12 +88,12 @@ export default async function Message(zhn, m, chatUpdate) {
       case "addevent":
       case "createevent":
         if (!m.isOwner) return m.reply("Only Administrator Can Access this Command!");
-        if (m.text.length < 2) return m.reply(`*${prefix}addevent* Title|Content Event / Kegiatan`);
-        if (!m.text.includes("|")) return m.reply(`*${prefix}addevent* Title|Content Event / Kegiatan`);
+        if (m.text.length < 3) return m.reply(`*${prefix}addevent* Title|Waktu|Content Event / Kegiatan`);
+        if (!m.text.includes("|")) return m.reply(`*${prefix}addevent* Title|Waktu|Content Event / Kegiatan`);
         let objectEvent = {
           Title: m.text.split("|")[0],
-          Time: Date.now(),
-          Content: m.text.split("|")[1],
+          Time: m.text.split("|")[1],
+          Content: m.text.split("|")[2],
         };
         event.push(objectEvent);
         fs.writeFileSync("./database/event.json", JSON.stringify(event, null, 2));
@@ -115,8 +106,8 @@ export default async function Message(zhn, m, chatUpdate) {
         if (!m.text) return m.reply(`*${prefix}delevent* Title`);
         let objEvent = {
           Title: m.text.split("|")[0],
-          Time: Date.now(),
-          Content: m.text.split("|")[1],
+          Time: m.text.split("|")[1],
+          Content: m.text.split("|")[2],
         };
         let index = event.findIndex((e) => {
           return e.Title === objEvent.Title;
@@ -146,7 +137,7 @@ export default async function Message(zhn, m, chatUpdate) {
         async function sendEventsSequentially() {
           for (let i = 0; i < event.length; i++) {
             const currentEvent = event[i];
-            const message = `「 *EVENT-BMWCCI* 」\n\n• *Title :* ${currentEvent.Title}\n• *Time :* ${moment(currentEvent.Time).tz('Asia/Jakarta').format('HH:mm:ss DD/MM/YYYY')}\n• *Description :* ${currentEvent.Content}\n\n`;
+            const message = `「 *EVENT-BMWCCI* 」\n\n• *Title :* ${currentEvent.Title}\n• *Time :* ${currentEvent.Time}\n• *Description :* ${currentEvent.Content}\n\n`;
             await m.reply(message.trim());
             await Func.sleep(5)
           }
@@ -155,7 +146,8 @@ export default async function Message(zhn, m, chatUpdate) {
         sendEventsSequentially(); // Call the asynchronous function
         break;
       case "1":
-        let about_bmw = `
+        {
+        let text = `
 BMWCCI didirikan pada 24 Mei 2003 di Jakarta Indonesia.  BMWCCI resmi menjadi anggota International BMW Club Organization dalam BMW Clubs Council Meeting di Pretoria, Afrika Selatan, pada hari Kamis, 14 Desember 2006. BMWCCI telah berkembang, dari 29 Chapter dan 2 Register dengan keanggotaan lebih dari 3000 anggota  dan tersebar di seluruh tanah air dan akan terus berkembang dengan adanya pengajuan dari daerah untuk menjadi bagian dari BMWCCI.  Awalnya calon klub anggota BMW mengusulkan nama klub BMW tersebut adalah BMW Club Indonesia.  Namun mengingat nama klub tersebut sebelumnya sudah ada, yaitu klub khusus sepeda motor BMW Motorrad Club Indonesia.,
 
 Akhirnya disepakati nama klub tersebut diubah menjadi BMW Car Club of Indonesia (selanjutnya disebut BMWCCI).  Penamaan Klub disesuaikan dengan format nama Klub serupa di berbagai negara lain.  Dalam pertemuan di BMW Astra Jalan Proklamasi, para anggota BMWCCI sepakat untuk menyepakati rancangan Anggaran Dasar BMWCCI dan nama klub.  Maka lahirlah BMWCCI pada tanggal 24 Mei 2003 dengan jumlah anggota awal 23 orang.  Demikian pula latar belakang pekerjaan dan usia anggota BMWCCI.  Hal ini sesuai dengan sifat BMWCCI yang terbuka dan bebas.  Pada hari Kamis, 14 Desember 2006 BMWCCI resmi menjadi anggota Organisasi Klub BMW Internasional.  Secara resmi BMWCCI menjadi anggota International Council of BMW Clubs setelah pertemuan tahunan mereka di Pretoria, Afrika Selatan pada bulan Oktober 2006.
@@ -166,10 +158,28 @@ Dengan adanya perubahan format tersebut maka nama Klub pun ikut berubah menjadi 
 Cirebon Chapter merupakan Club Member pertama yang menggunakan nama BMW Car Clubs Indonesia Chapter Cirebon.  VISI, BMWCCI sebagai klub yang mempunyai nilai tambah bagi para anggotanya, BMWCCI sebagai klub yang tidak hanya sebagai komunitas otomotif namun sebagai BMW Car Club yang solid dan terkenal di tingkat nasional dan internasional.  MISI, BMWCCI membentuk anggotanya yang solid, kompak dan kekeluargaan melalui acara-acara terkait yang dapat membawa nama baik BMWCCI.  Menumbuhkan rasa memiliki dan kecintaan para anggota terhadap klub dan kendaraannya.  Memberikan nilai tambah dan manfaat bagi anggota dan klub.  BMWCCI
 
 https://bmwcci.org/about-us/`
-        m.reply(about_bmw.trim())
+      return zhn.sendMessage(m.from,
+        {
+          text,
+          contextInfo: {
+            mentionedJid: zhn.parseMention(text),
+            externalAdReply: {
+              title: zhn?.user?.name,
+              mediaType: 1,
+              previewType: 0,
+              renderLargerThumbnail: true,
+              thumbnail: fs.readFileSync("./temp/BMWJC Logo.jpg"),
+              sourceUrl: config.Exif.packWebsite,
+            },
+          },
+        },
+        { quoted: m }
+      );
+        }
       break;
       case "2":
-        let informasi_bmmw = `
+        {
+        let text = `
 Website BMWCCI 
 https://bmwcci.org/
 
@@ -186,10 +196,28 @@ Instagram : https://www.instagram.com/bmwcci.jakarta_chapter
 
 Facebook : 
 https://www.facebook.com/BmwcciJakartaChapter`
-        m.reply(informasi_bmmw.trim())
+          return zhn.sendMessage(m.from,
+          {
+            text,
+            contextInfo: {
+              mentionedJid: zhn.parseMention(text),
+              externalAdReply: {
+                title: zhn?.user?.name,
+                mediaType: 1,
+                previewType: 0,
+                renderLargerThumbnail: true,
+                thumbnail: fs.readFileSync("./temp/BMWJC Logo.jpg"),
+                sourceUrl: config.Exif.packWebsite,
+              },
+            },
+          },
+          { quoted: m }
+        );
+        }
         break
       case "3":
-        let register_anggota = `
+        {
+        let text = `
 FORMULIR PENDAFTARAN ANGGOTA BARU / RENEWAL
 BMWCCI JAKARTA CHAPTER OFFICIAL CLUB
 SYARAT DAN KETENTUAN
@@ -222,26 +250,65 @@ Program Kegiatan baik Event Nasional dan Internasional
 Harga spesial dari kerjasama beberapa mitra
 
 https://member.bmwccijakartachapter.org/register`
-        m.reply(register_anggota.trim())
-        break
-      case "speed":
-        {
-          const { promisify } = await import("util");
-          const cp = (await import("child_process")).default;
-          let execute = promisify(exec).bind(cp);
-          m.reply("Testing Speed...");
-          let o;
-          try {
-            o = exec(`speedtest --accept-license`); // install speedtest-cli
-          } catch (e) {
-            o = e;
-          } finally {
-            let { stdout, stderr } = o;
-            if (stdout) return m.reply(stdout);
-            if (stderr) return m.reply(stderr);
-          }
+        return zhn.sendMessage(m.from,
+          {
+            text,
+            contextInfo: {
+              mentionedJid: zhn.parseMention(text),
+              externalAdReply: {
+                title: zhn?.user?.name,
+                mediaType: 1,
+                previewType: 0,
+                renderLargerThumbnail: true,
+                thumbnail: fs.readFileSync("./temp/BMWJC Logo.jpg"),
+                sourceUrl: config.Exif.packWebsite,
+              },
+            },
+          },
+          { quoted: m }
+        );
         }
-        break;
+        break
+      case "4":
+        {
+          let text = '```We are working hard to make it even better for you, and we will let you know as soon as it is ready to go. In the meantime, you can still access all of our other awesome features. ✨Thanks for your patience! We appreciate you sticking with us```'
+          return zhn.sendMessage(m.from,
+            {
+              text,
+              contextInfo: {
+                mentionedJid: zhn.parseMention(text),
+                externalAdReply: {
+                  title: zhn?.user?.name,
+                  mediaType: 1,
+                  previewType: 0,
+                  renderLargerThumbnail: true,
+                  thumbnail: fs.readFileSync("./temp/BMWJC Logo.jpg"),
+                  sourceUrl: config.Exif.packWebsite,
+                },
+              },
+            },
+            { quoted: m }
+          );
+        }
+        break
+      case "5":
+        {
+          event.sort((a, b) => (a.Waktu < b.Waktu) ? 1 : -1);
+
+          async function sendEvent() {
+            for (let i = 0; i < event.length; i++) {
+              const currentEvent = event[i];
+              const message = `*${currentEvent.Title}*\n\nJadwal Event : ${currentEvent.Time}\n\n${currentEvent.Content}\n\n`;
+              await m.reply(message.trim());
+              await Func.sleep(5)
+            }
+          }
+
+          sendEvent(); // Call the asynchronous function
+          break;
+        }
+
+      case "admin":
       case "owner":
         {
           zhn.sendContact(m.from, config.options.owner, m);

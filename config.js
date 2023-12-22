@@ -27,11 +27,11 @@ export default {
    },
 
    Exif: {
-      packId: "https://member.bmwccijakartachapter.org/",
+      packId: "https://bmwcci.org",
       packName: `Sticker Ini Dibuat Oleh :`,
       packPublish: "X - ZhnDvs",
       packEmail: "admin@bintanginovasiteknologi.com",
-      packWebsite: "https://member.bmwccijakartachapter.org/",
+      packWebsite: "https://bmwcci.org",
    },
 
    // message  response awikwok there
